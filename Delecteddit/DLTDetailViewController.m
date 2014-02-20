@@ -18,7 +18,7 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    self.detailDescriptionLabel.text = self.post.selftext;
+    self.postSelfTextView.text = self.post.selftext;
 }
 
 - (void)didReceiveMemoryWarning

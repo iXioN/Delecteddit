@@ -31,10 +31,10 @@
      */
     if (!managedObjectStore.persistentStoreCoordinator){
         [managedObjectStore createPersistentStoreCoordinator];
-        //NSString *storePath = [RKApplicationDataDirectory() stringByAppendingPathComponent:@"Delecteddit.sqlite"];
+        NSString *storePath = [RKApplicationDataDirectory() stringByAppendingPathComponent:@"Delecteddit.sqlite"];
         NSError *error;
-        NSPersistentStore *persistentStore = [managedObjectStore addInMemoryPersistentStore:&error];
-        //NSPersistentStore *persistentStore = [managedObjectStore addSQLitePersistentStoreAtPath:storePath fromSeedDatabaseAtPath:nil withConfiguration:nil options:nil error:&error];
+        //NSPersistentStore *persistentStore = [managedObjectStore addInMemoryPersistentStore:&error];//for in memory persistentStore
+        NSPersistentStore *persistentStore = [managedObjectStore addSQLitePersistentStoreAtPath:storePath fromSeedDatabaseAtPath:nil withConfiguration:nil options:nil error:&error];
         NSAssert(persistentStore, @"Failed to add persistent store with error: %@", error);
         
         // Create the managed object contexts
@@ -43,19 +43,16 @@
         // Configure a managed object cache to ensure we do not create duplicate objects
         managedObjectStore.managedObjectCache = [[RKInMemoryManagedObjectCache alloc] initWithManagedObjectContext:managedObjectStore.persistentStoreManagedObjectContext];
         [managedObjectStore.mainQueueManagedObjectContext setMergePolicy:NSMergeByPropertyObjectTrumpMergePolicy];
-        
-        
     }
 }
 
-/* Reddit posts Object Manager */
--(RKEntityMapping *)postEntityMapping {
+- (RKEntityMapping *)postEntityMapping {
     RKObjectManager *sharedManager = [RKObjectManager sharedManager];
     RKEntityMapping *posttMapping = [RKEntityMapping mappingForEntityForName:@"Post" inManagedObjectStore:sharedManager.managedObjectStore];
     posttMapping.identificationAttributes = @[ @"identifier" ];
     
     [posttMapping addAttributeMappingsFromDictionary:@{
-                                                         @"data.id": @"identifier",
+                                                         @"data.id" : @"identifier",
                                                          @"data.num_comments" : @"commentsNumber",
                                                          @"data.thumbnail" : @"thumbnailURL",
                                                          @"data.created" : @"createdDate",
@@ -68,24 +65,27 @@
         return posttMapping;
 }
 
--(RKEntityMapping *)pageEntityMapping {
+- (RKEntityMapping *)pageEntityMapping {
     RKObjectManager *sharedManager = [RKObjectManager sharedManager];
     RKEntityMapping *pageMapping = [RKEntityMapping mappingForEntityForName:@"Page" inManagedObjectStore:sharedManager.managedObjectStore];
-    pageMapping.identificationAttributes = @[ @"after" ];
-    
+//    pageMapping.identificationAttributes = @[ @"after" ];
     [pageMapping addAttributeMappingsFromDictionary:@{
                                                        @"after": @"after",
                                                        @"befor" : @"befor",
                                                     }
      ];
-    RKRelationshipMapping *relationshipMapping = [RKRelationshipMapping relationshipMappingFromKeyPath:@"children" toKeyPath:@"postSet" withMapping:[self postEntityMapping]];
+    RKRelationshipMapping *relationshipMapping = [RKRelationshipMapping
+                                                  relationshipMappingFromKeyPath:@"children"
+                                                  toKeyPath:@"postSet"
+                                                  withMapping:[self postEntityMapping]
+                                                  ];
     [pageMapping addPropertyMapping:relationshipMapping];
     return pageMapping;
 }
 
 
 
--(RKResponseDescriptor *)postResponseDescriptor {
+- (RKResponseDescriptor *)postResponseDescriptor {
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:[self pageEntityMapping]
                                                                                             method:RKRequestMethodGET
                                                                                        pathPattern:nil
@@ -94,7 +94,7 @@
     return responseDescriptor;
 }
 
-- (RKObjectManager *) objectManager {
+- (RKObjectManager *)objectManager {
     RKObjectManager *sharedManager = [RKObjectManager sharedManager];
     // Register our mappings with the provider
     [sharedManager addResponseDescriptor:[self postResponseDescriptor]];

@@ -15,5 +15,5 @@
 + (NSURL *)getURLSever;
 + (void)setupRestKit;
 
-- (RKObjectManager *) objectManager;
+- (RKObjectManager *)objectManager;
 @end

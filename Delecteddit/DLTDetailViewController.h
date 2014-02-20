@@ -11,6 +11,6 @@
 @class DLTPost;
 @interface DLTDetailViewController : UIViewController
 
+@property (weak, nonatomic) IBOutlet UITextView *postSelfTextView;
 @property (strong, nonatomic) DLTPost *post;
-@property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
 @end

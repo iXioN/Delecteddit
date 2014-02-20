@@ -15,15 +15,10 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
-//    UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
-//    DLTMasterViewController *controller = (DLTMasterViewController *)navigationController.topViewController;
-    
-    
     //setup all the core data stack and the rest configuration
     [DLTRestManager setupRestKit];
     // Enable Activity Indicator Spinner
     [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
-
     return YES;
 }
 							

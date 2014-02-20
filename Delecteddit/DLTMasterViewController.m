@@ -20,16 +20,12 @@
 @property (nonatomic, strong) UIButton *footButton;
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, strong) DLTRestManager *restManager;
-
 @property (nonatomic, strong) NSString *nextPage;
-
-
 @end
 
 @implementation DLTMasterViewController
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     self.tableView.tableFooterView = self.footButton;
 	// Do any additional setup after loading the view, typically from a nib.
@@ -39,7 +35,7 @@
 }
 
 #pragma mark - Lazy Loaders
-- (NSFetchedResultsController *)fetchedResultsController{
+- (NSFetchedResultsController *)fetchedResultsController {
     if (!_fetchedResultsController) {
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Post"];
         fetchRequest.sortDescriptors = @[
@@ -55,7 +51,6 @@
     return _fetchedResultsController;
 }
 
-
 - (DLTRestManager *)restManager {
     if (!_restManager) {
         _restManager = [[DLTRestManager alloc]init];
@@ -63,25 +58,27 @@
     return _restManager;
 }
 
--(UIButton *)footButton {
+- (UIButton *)footButton {
     if (!_footButton) {
         CGRect footerRect = CGRectMake(0, 0, 320, 40);
         _footButton = [[UIButton alloc] initWithFrame:footerRect];
         [_footButton setTitle:@"Show more" forState:UIControlStateNormal];
-        _footButton.backgroundColor = [UIColor redColor];
+        _footButton.backgroundColor = [UIColor lightGrayColor];
         _footButton.titleLabel.textColor = [UIColor blackColor];
         [_footButton addTarget:self action:@selector(loadMorePosts:) forControlEvents:UIControlEventTouchDown];
     }
     return _footButton;
 }
 
-- (void)loadData{
+- (void)loadData {
     // Load the object model via RestKit
     NSString *jsonPath = @".json";
+    //if nextPage not nil add the nextPage identifier to get the next page
     if (self.nextPage) {
         NSString *arguments = [NSString stringWithFormat:@"?after=%@", self.nextPage];
         jsonPath = [jsonPath stringByAppendingString:arguments];
     }
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     RKObjectManager *objectManager = [self.restManager objectManager];
     [objectManager getObjectsAtPath:jsonPath parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         //the fetchedResultsController send notification when objects are loaded, we don't need to call the reload data
@@ -93,9 +90,12 @@
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         RKLogError(@"Load failed with error: %@", error);
         [self.refreshControl endRefreshing];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Error trying get the posts..." message:@"Check your network" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        [alert show];
         [MBProgressHUD hideHUDForView:self.view animated:YES];
     }];
 }
+
 - (IBAction)refresh:(id)sender {
     [self loadData];
 }
@@ -103,7 +103,6 @@
 - (DLTPost *)postForIndexPath:(NSIndexPath *)indexPath {
     return [self.fetchedResultsController objectAtIndexPath:indexPath];
 }
-
 
 #pragma mark - Table View
 
@@ -115,19 +114,16 @@
         return nil;
 }
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return [[self.fetchedResultsController sections] count];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController sections][section];
     return [sectionInfo numberOfObjects];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     DLTPostTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     [self configureCell:cell atIndexPath:indexPath];
     return cell;
@@ -135,9 +131,10 @@
 
 -(BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     DLTPost *post = [self postForIndexPath:[self.tableView indexPathForSelectedRow]];
+    //if selftext then push the detail view controller
     if (post.selftext && [post.selftext length] > 0) {
         return YES;
-//        [self performSegueWithIdentifier:@"showDetail" sender:
+    //if url, open safari to the given url
     } else if (post.url && [post.url length] > 0){
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:post.url]];
         return NO;
@@ -145,8 +142,7 @@
     return NO;
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"showDetail"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         DLTPost *post = [self postForIndexPath:indexPath];
@@ -156,14 +152,12 @@
 
 #pragma mark - Fetched results controller
 
-- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
-{
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
     [self.tableView beginUpdates];
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
-           atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
-{
+           atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
     switch(type) {
         case NSFetchedResultsChangeInsert:
             [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
@@ -177,10 +171,8 @@
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
        atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
-      newIndexPath:(NSIndexPath *)newIndexPath
-{
+      newIndexPath:(NSIndexPath *)newIndexPath {
     UITableView *tableView = self.tableView;
-    
     switch(type) {
         case NSFetchedResultsChangeInsert:
             [tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -201,20 +193,18 @@
     }
 }
 
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
-{
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
     [self.tableView endUpdates];
 }
 
-- (void)configureCell:(UITableViewCell *)originalCell atIndexPath:(NSIndexPath *)indexPath
-{
+- (void)configureCell:(UITableViewCell *)originalCell atIndexPath:(NSIndexPath *)indexPath {
     DLTPostTableViewCell *cell = (DLTPostTableViewCell *)originalCell;
     DLTPost *post = [self postForIndexPath:indexPath];
     cell.titleLabel.text = post.title;
     cell.scoreLabel.text = [post.score stringValue];
     [cell.thumbnailImageView setImageWithURL:[NSURL URLWithString:post.thumbnailURL] placeholderImage:[UIImage imageNamed:@"Placeholder"]];
     cell.commentNumberLabel.text = [NSString stringWithFormat:@"%@ comments", [post.commentsNumber stringValue]];
-    
+    //show accessory depending on the selftext post property
     if ([post.selftext length] > 0) {
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     } else {
@@ -223,10 +213,8 @@
 }
 
 
--(void)loadMorePosts:(id)sender
-{
+- (void)loadMorePosts:(id)sender {
     if (self.nextPage) {
-        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         [self loadData];
     } else {
         [self.footButton setTitle:@"No more post to load" forState:UIControlStateNormal];
