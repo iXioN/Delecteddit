@@ -1,16 +1,16 @@
 //
-//  Page.m
+//  DLTPage.m
 //  Delecteddit
 //
 //  Created by Antonin Lacombe on 19/02/2014.
 //  Copyright (c) 2014 Antonin Lacombe. All rights reserved.
 //
 
-#import "Page.h"
+#import "DLTPage.h"
 #import "DLTPost.h"
 
 
-@implementation Page
+@implementation DLTPage
 
 @dynamic after;
 @dynamic befor;

@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-
 #import <CoreData/CoreData.h>
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @interface DLTMasterViewController : UITableViewController <NSFetchedResultsControllerDelegate>
 

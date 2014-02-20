@@ -8,9 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+@class DLTPost;
 @interface DLTDetailViewController : UIViewController
 
-@property (strong, nonatomic) id detailItem;
-
+@property (strong, nonatomic) DLTPost *post;
 @property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
 @end

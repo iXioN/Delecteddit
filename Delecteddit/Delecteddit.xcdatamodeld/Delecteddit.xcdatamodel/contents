@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="13B42" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
-    <entity name="Page" representedClassName="Page" syncable="YES">
+    <entity name="Page" representedClassName="DLTPage" syncable="YES">
         <attribute name="after" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="befor" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="postSet" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Post" inverseName="page" inverseEntity="Post" syncable="YES"/>
@@ -9,13 +9,16 @@
         <attribute name="commentsNumber" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="createdDate" attributeType="Date" indexed="YES" syncable="YES"/>
         <attribute name="identifier" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="isSelf" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="score" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="selftext" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="thumbnailURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="page" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Page" inverseName="postSet" inverseEntity="Page" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Post" positionX="0" positionY="0" width="0" height="0"/>
         <element name="Page" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Post" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

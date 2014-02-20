@@ -8,14 +8,21 @@
 
 #import "DLTMasterViewController.h"
 #import "DLTDetailViewController.h"
+#import "DLTPostTableViewCell.h"
+#import "MBProgressHUD.h"
 #import "DLTRestManager.h"
 #import "DLTPost.h"
+#import "DLTPage.h"
 
 @interface DLTMasterViewController ()
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
+- (void)configureCell:(UITableViewCell *)originalCell atIndexPath:(NSIndexPath *)indexPath;
 
-@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
+@property (nonatomic, strong) UIButton *footButton;
+@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, strong) DLTRestManager *restManager;
+
+@property (nonatomic, strong) NSString *nextPage;
+
 
 @end
 
@@ -24,37 +31,69 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    CGRect footerRect = CGRectMake(0, 0, 320, 40);
-    UIButton *tableFooter = [[UIButton alloc] initWithFrame:footerRect];
-    [tableFooter setTitle:@"Show more" forState:UIControlStateNormal];
-    tableFooter.titleLabel.textColor = [UIColor blackColor];
-    self.tableView.tableFooterView = tableFooter;
+    self.tableView.tableFooterView = self.footButton;
 	// Do any additional setup after loading the view, typically from a nib.
+    self.nextPage = nil;
     [self loadData];
 
 }
 
 #pragma mark - Lazy Loaders
+- (NSFetchedResultsController *)fetchedResultsController{
+    if (!_fetchedResultsController) {
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Post"];
+        fetchRequest.sortDescriptors = @[
+                                         [NSSortDescriptor sortDescriptorWithKey:@"score" ascending:NO],
+                                         ];
+        self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[RKManagedObjectStore defaultStore].mainQueueManagedObjectContext sectionNameKeyPath:nil cacheName:nil];
+        self.fetchedResultsController.delegate = self;
+        NSError *error;
+        [self.fetchedResultsController performFetch:&error];
+        //        RKLogConfigureByName("RestKit/ObjectMapping", RKLogLevelTrace);
+        NSAssert(!error, @"Error performing fetch request: %@", error);
+    }
+    return _fetchedResultsController;
+}
+
 
 - (DLTRestManager *)restManager {
-    if (_restManager == nil) {
+    if (!_restManager) {
         _restManager = [[DLTRestManager alloc]init];
     }
     return _restManager;
 }
 
+-(UIButton *)footButton {
+    if (!_footButton) {
+        CGRect footerRect = CGRectMake(0, 0, 320, 40);
+        _footButton = [[UIButton alloc] initWithFrame:footerRect];
+        [_footButton setTitle:@"Show more" forState:UIControlStateNormal];
+        _footButton.backgroundColor = [UIColor redColor];
+        _footButton.titleLabel.textColor = [UIColor blackColor];
+        [_footButton addTarget:self action:@selector(loadMorePosts:) forControlEvents:UIControlEventTouchDown];
+    }
+    return _footButton;
+}
 
-- (void)loadData {
-    
+- (void)loadData{
     // Load the object model via RestKit
+    NSString *jsonPath = @".json";
+    if (self.nextPage) {
+        NSString *arguments = [NSString stringWithFormat:@"?after=%@", self.nextPage];
+        jsonPath = [jsonPath stringByAppendingString:arguments];
+    }
     RKObjectManager *objectManager = [self.restManager objectManager];
-    [objectManager getObjectsAtPath:@".json" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+    [objectManager getObjectsAtPath:jsonPath parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         //the fetchedResultsController send notification when objects are loaded, we don't need to call the reload data
+        if ([mappingResult count]>0){
+            self.nextPage = [[[mappingResult dictionary] objectForKey:@"data"] valueForKey:@"after"];
+        }
         [self.refreshControl endRefreshing];
-
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         RKLogError(@"Load failed with error: %@", error);
         [self.refreshControl endRefreshing];
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
     }];
 }
 - (IBAction)refresh:(id)sender {
@@ -89,37 +128,33 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+    DLTPostTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     [self configureCell:cell atIndexPath:indexPath];
     return cell;
+}
+
+-(BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    DLTPost *post = [self postForIndexPath:[self.tableView indexPathForSelectedRow]];
+    if (post.selftext && [post.selftext length] > 0) {
+        return YES;
+//        [self performSegueWithIdentifier:@"showDetail" sender:
+    } else if (post.url && [post.url length] > 0){
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:post.url]];
+        return NO;
+    }
+    return NO;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:@"showDetail"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        NSManagedObject *object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-        [[segue destinationViewController] setDetailItem:object];
+        DLTPost *post = [self postForIndexPath:indexPath];
+        [[segue destinationViewController] setPost:post];
     }
 }
 
 #pragma mark - Fetched results controller
-
-- (NSFetchedResultsController *)fetchedResultsController{
-    if (!_fetchedResultsController) {
-        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Post"];
-        fetchRequest.sortDescriptors = @[
-                                         [NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:NO],
-                                         ];
-        self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[RKManagedObjectStore defaultStore].mainQueueManagedObjectContext sectionNameKeyPath:nil cacheName:nil];
-        self.fetchedResultsController.delegate = self;
-        NSError *error;
-        [self.fetchedResultsController performFetch:&error];
-        //        RKLogConfigureByName("RestKit/ObjectMapping", RKLogLevelTrace);
-        NSAssert(!error, @"Error performing fetch request: %@", error);
-    }
-    return _fetchedResultsController;
-}
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
 {
@@ -171,20 +206,31 @@
     [self.tableView endUpdates];
 }
 
-/*
-// Implementing the above methods to update the table view in response to individual changes may have performance implications if a large number of changes are made simultaneously. If this proves to be an issue, you can instead just implement controllerDidChangeContent: which notifies the delegate that all section and object changes have been processed. 
-*/
-// - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
-//{
-//    // In the simplest, most efficient, case, reload the table view.
-//    [self.tableView reloadData];
-//}
-
-
-- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
+- (void)configureCell:(UITableViewCell *)originalCell atIndexPath:(NSIndexPath *)indexPath
 {
+    DLTPostTableViewCell *cell = (DLTPostTableViewCell *)originalCell;
     DLTPost *post = [self postForIndexPath:indexPath];
-    cell.textLabel.text = post.title;
+    cell.titleLabel.text = post.title;
+    cell.scoreLabel.text = [post.score stringValue];
+    [cell.thumbnailImageView setImageWithURL:[NSURL URLWithString:post.thumbnailURL] placeholderImage:[UIImage imageNamed:@"Placeholder"]];
+    cell.commentNumberLabel.text = [NSString stringWithFormat:@"%@ comments", [post.commentsNumber stringValue]];
+    
+    if ([post.selftext length] > 0) {
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    } else {
+        cell.accessoryType = UITableViewCellAccessoryNone;
+    }
+}
+
+
+-(void)loadMorePosts:(id)sender
+{
+    if (self.nextPage) {
+        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        [self loadData];
+    } else {
+        [self.footButton setTitle:@"No more post to load" forState:UIControlStateNormal];
+    }
 }
 
 @end

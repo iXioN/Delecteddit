@@ -8,6 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		4FF69765186B4C778EF5BA41 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 571CCAA951AF4C5D87DC0D5F /* libPods.a */; };
+		572E0EFE18B54CBD00D194A6 /* DLTPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 572E0EFD18B54CBD00D194A6 /* DLTPost.m */; };
+		572E0EFF18B54CBD00D194A6 /* DLTPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 572E0EFD18B54CBD00D194A6 /* DLTPost.m */; };
+		572E0F0218B54CBE00D194A6 /* DLTPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 572E0F0118B54CBE00D194A6 /* DLTPage.m */; };
+		572E0F0318B54CBE00D194A6 /* DLTPage.m in Sources */ = {isa = PBXBuildFile; fileRef = 572E0F0118B54CBE00D194A6 /* DLTPage.m */; };
+		572E0F0618B5680C00D194A6 /* DLTPostTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 572E0F0518B5680C00D194A6 /* DLTPostTableViewCell.m */; };
+		572E0F0D18B5758500D194A6 /* Placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 572E0F0C18B5758500D194A6 /* Placeholder.png */; };
+		572E0F0E18B5758500D194A6 /* Placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 572E0F0C18B5758500D194A6 /* Placeholder.png */; };
 		57C6422E18B40F0C000D6F29 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57C6422D18B40F0C000D6F29 /* Foundation.framework */; };
 		57C6423018B40F0C000D6F29 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57C6422F18B40F0C000D6F29 /* CoreGraphics.framework */; };
 		57C6423218B40F0C000D6F29 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57C6423118B40F0C000D6F29 /* UIKit.framework */; };
@@ -28,10 +35,6 @@
 		57C6426218B40F0C000D6F29 /* DelectedditTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6426118B40F0C000D6F29 /* DelectedditTests.m */; };
 		57C6427018B4137E000D6F29 /* DLTRestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6426F18B4137E000D6F29 /* DLTRestManager.m */; };
 		57C6427118B4137E000D6F29 /* DLTRestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6426F18B4137E000D6F29 /* DLTRestManager.m */; };
-		57D3ADBE18B4284B00E7F67D /* DLTPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 57D3ADBD18B4284B00E7F67D /* DLTPost.m */; };
-		57D3ADBF18B4284B00E7F67D /* DLTPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 57D3ADBD18B4284B00E7F67D /* DLTPost.m */; };
-		57D3ADC618B4329300E7F67D /* Page.m in Sources */ = {isa = PBXBuildFile; fileRef = 57D3ADC518B4329300E7F67D /* Page.m */; };
-		57D3ADC718B4329300E7F67D /* Page.m in Sources */ = {isa = PBXBuildFile; fileRef = 57D3ADC518B4329300E7F67D /* Page.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +49,13 @@
 
 /* Begin PBXFileReference section */
 		571CCAA951AF4C5D87DC0D5F /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		572E0EFC18B54CBD00D194A6 /* DLTPost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLTPost.h; sourceTree = "<group>"; };
+		572E0EFD18B54CBD00D194A6 /* DLTPost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLTPost.m; sourceTree = "<group>"; };
+		572E0F0018B54CBE00D194A6 /* DLTPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLTPage.h; sourceTree = "<group>"; };
+		572E0F0118B54CBE00D194A6 /* DLTPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLTPage.m; sourceTree = "<group>"; };
+		572E0F0418B5680C00D194A6 /* DLTPostTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLTPostTableViewCell.h; sourceTree = "<group>"; };
+		572E0F0518B5680C00D194A6 /* DLTPostTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLTPostTableViewCell.m; sourceTree = "<group>"; };
+		572E0F0C18B5758500D194A6 /* Placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Placeholder.png; sourceTree = "<group>"; };
 		57C6422A18B40F0C000D6F29 /* Delecteddit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Delecteddit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57C6422D18B40F0C000D6F29 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		57C6422F18B40F0C000D6F29 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -71,10 +81,6 @@
 		57C6426118B40F0C000D6F29 /* DelectedditTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DelectedditTests.m; sourceTree = "<group>"; };
 		57C6426E18B4137E000D6F29 /* DLTRestManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLTRestManager.h; sourceTree = "<group>"; };
 		57C6426F18B4137E000D6F29 /* DLTRestManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLTRestManager.m; sourceTree = "<group>"; };
-		57D3ADBC18B4284B00E7F67D /* DLTPost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLTPost.h; sourceTree = "<group>"; };
-		57D3ADBD18B4284B00E7F67D /* DLTPost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLTPost.m; sourceTree = "<group>"; };
-		57D3ADC418B4329300E7F67D /* Page.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Page.h; sourceTree = "<group>"; };
-		57D3ADC518B4329300E7F67D /* Page.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Page.m; sourceTree = "<group>"; };
 		F2B69FAE66CC44B8BBD77892 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -105,6 +111,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		572E0F0B18B5758500D194A6 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				572E0F0C18B5758500D194A6 /* Placeholder.png */,
+			);
+			path = images;
+			sourceTree = "<group>";
+		};
 		57C6422118B40F0C000D6F29 = {
 			isa = PBXGroup;
 			children = (
@@ -141,6 +155,7 @@
 		57C6423518B40F0C000D6F29 /* Delecteddit */ = {
 			isa = PBXGroup;
 			children = (
+				572E0F0B18B5758500D194A6 /* images */,
 				57C6426D18B41337000D6F29 /* Controllers */,
 				57C6426C18B41311000D6F29 /* Models */,
 				57C6426B18B412C3000D6F29 /* ViewControllers */,
@@ -190,6 +205,8 @@
 				57C6424818B40F0C000D6F29 /* DLTMasterViewController.m */,
 				57C6424A18B40F0C000D6F29 /* DLTDetailViewController.h */,
 				57C6424B18B40F0C000D6F29 /* DLTDetailViewController.m */,
+				572E0F0418B5680C00D194A6 /* DLTPostTableViewCell.h */,
+				572E0F0518B5680C00D194A6 /* DLTPostTableViewCell.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -197,10 +214,10 @@
 		57C6426C18B41311000D6F29 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				57D3ADC418B4329300E7F67D /* Page.h */,
-				57D3ADC518B4329300E7F67D /* Page.m */,
-				57D3ADBC18B4284B00E7F67D /* DLTPost.h */,
-				57D3ADBD18B4284B00E7F67D /* DLTPost.m */,
+				572E0F0018B54CBE00D194A6 /* DLTPage.h */,
+				572E0F0118B54CBE00D194A6 /* DLTPage.m */,
+				572E0EFC18B54CBD00D194A6 /* DLTPost.h */,
+				572E0EFD18B54CBD00D194A6 /* DLTPost.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -294,6 +311,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				57C6424E18B40F0C000D6F29 /* Images.xcassets in Resources */,
+				572E0F0D18B5758500D194A6 /* Placeholder.png in Resources */,
 				57C6423A18B40F0C000D6F29 /* InfoPlist.strings in Resources */,
 				57C6424318B40F0C000D6F29 /* Main.storyboard in Resources */,
 			);
@@ -304,6 +322,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				57C6426018B40F0C000D6F29 /* InfoPlist.strings in Resources */,
+				572E0F0E18B5758500D194A6 /* Placeholder.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -348,12 +367,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				57C6423C18B40F0C000D6F29 /* main.m in Sources */,
-				57D3ADBE18B4284B00E7F67D /* DLTPost.m in Sources */,
+				572E0F0218B54CBE00D194A6 /* DLTPage.m in Sources */,
 				57C6424C18B40F0C000D6F29 /* DLTDetailViewController.m in Sources */,
+				572E0EFE18B54CBD00D194A6 /* DLTPost.m in Sources */,
+				572E0F0618B5680C00D194A6 /* DLTPostTableViewCell.m in Sources */,
 				57C6424618B40F0C000D6F29 /* Delecteddit.xcdatamodeld in Sources */,
 				57C6424018B40F0C000D6F29 /* DLTAppDelegate.m in Sources */,
 				57C6427018B4137E000D6F29 /* DLTRestManager.m in Sources */,
-				57D3ADC618B4329300E7F67D /* Page.m in Sources */,
 				57C6424918B40F0C000D6F29 /* DLTMasterViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -362,9 +382,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				57D3ADBF18B4284B00E7F67D /* DLTPost.m in Sources */,
+				572E0EFF18B54CBD00D194A6 /* DLTPost.m in Sources */,
 				57C6427118B4137E000D6F29 /* DLTRestManager.m in Sources */,
-				57D3ADC718B4329300E7F67D /* Page.m in Sources */,
+				572E0F0318B54CBE00D194A6 /* DLTPage.m in Sources */,
 				57C6426218B40F0C000D6F29 /* DelectedditTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

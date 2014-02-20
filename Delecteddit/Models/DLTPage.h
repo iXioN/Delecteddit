@@ -1,5 +1,5 @@
 //
-//  Page.h
+//  DLTPage.h
 //  Delecteddit
 //
 //  Created by Antonin Lacombe on 19/02/2014.
@@ -11,14 +11,14 @@
 
 @class DLTPost;
 
-@interface Page : NSManagedObject
+@interface DLTPage : NSManagedObject
 
 @property (nonatomic, retain) NSString * after;
 @property (nonatomic, retain) NSString * befor;
 @property (nonatomic, retain) NSSet *postSet;
 @end
 
-@interface Page (CoreDataGeneratedAccessors)
+@interface DLTPage (CoreDataGeneratedAccessors)
 
 - (void)addPostSetObject:(DLTPost *)value;
 - (void)removePostSetObject:(DLTPost *)value;

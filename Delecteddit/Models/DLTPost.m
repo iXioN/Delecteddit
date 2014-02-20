@@ -2,20 +2,25 @@
 //  DLTPost.m
 //  Delecteddit
 //
-//  Created by Antonin Lacombe on 18/02/2014.
+//  Created by Antonin Lacombe on 19/02/2014.
 //  Copyright (c) 2014 Antonin Lacombe. All rights reserved.
 //
 
 #import "DLTPost.h"
+#import "DLTPage.h"
 
 
 @implementation DLTPost
 
+@dynamic commentsNumber;
+@dynamic createdDate;
 @dynamic identifier;
 @dynamic score;
-@dynamic commentsNumber;
 @dynamic thumbnailURL;
-@dynamic createdDate;
 @dynamic title;
+@dynamic selftext;
+@dynamic isSelf;
+@dynamic url;
+@dynamic page;
 
 @end

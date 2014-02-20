@@ -31,9 +31,10 @@
      */
     if (!managedObjectStore.persistentStoreCoordinator){
         [managedObjectStore createPersistentStoreCoordinator];
-        NSString *storePath = [RKApplicationDataDirectory() stringByAppendingPathComponent:@"Delecteddit.sqlite"];
+        //NSString *storePath = [RKApplicationDataDirectory() stringByAppendingPathComponent:@"Delecteddit.sqlite"];
         NSError *error;
-        NSPersistentStore *persistentStore = [managedObjectStore addSQLitePersistentStoreAtPath:storePath fromSeedDatabaseAtPath:nil withConfiguration:nil options:nil error:&error];
+        NSPersistentStore *persistentStore = [managedObjectStore addInMemoryPersistentStore:&error];
+        //NSPersistentStore *persistentStore = [managedObjectStore addSQLitePersistentStoreAtPath:storePath fromSeedDatabaseAtPath:nil withConfiguration:nil options:nil error:&error];
         NSAssert(persistentStore, @"Failed to add persistent store with error: %@", error);
         
         // Create the managed object contexts
@@ -60,7 +61,9 @@
                                                          @"data.created" : @"createdDate",
                                                          @"data.score" : @"score",
                                                          @"data.title" : @"title",
-
+                                                         @"data.selftext" : @"selftext",
+                                                         @"data.is_self" : @"isSelf",
+                                                         @"data.url" : @"url",
                                                          }];
         return posttMapping;
 }
@@ -68,7 +71,7 @@
 -(RKEntityMapping *)pageEntityMapping {
     RKObjectManager *sharedManager = [RKObjectManager sharedManager];
     RKEntityMapping *pageMapping = [RKEntityMapping mappingForEntityForName:@"Page" inManagedObjectStore:sharedManager.managedObjectStore];
-//    pageMapping.identificationAttributes = @[ @"identifier" ];
+    pageMapping.identificationAttributes = @[ @"after" ];
     
     [pageMapping addAttributeMappingsFromDictionary:@{
                                                        @"after": @"after",
