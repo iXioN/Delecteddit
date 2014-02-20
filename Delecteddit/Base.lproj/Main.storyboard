@@ -78,7 +78,7 @@
                             <outlet property="delegate" destination="pGg-6v-bdr" id="Y6K-Cp-Qkv"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Master" id="tQt-TN-PWz"/>
+                    <navigationItem key="navigationItem" title="Reddit Posts" id="tQt-TN-PWz"/>
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="G3d-yg-ZeS">
                         <autoresizingMask key="autoresizingMask"/>
                         <connections>
@@ -109,7 +109,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Detail" id="cra-N8-TIN"/>
+                    <navigationItem key="navigationItem" title="Post Detail " id="cra-N8-TIN"/>
                     <connections>
                         <outlet property="postSelfTextView" destination="9hn-aY-LLQ" id="rX1-Ln-utg"/>
                     </connections>
