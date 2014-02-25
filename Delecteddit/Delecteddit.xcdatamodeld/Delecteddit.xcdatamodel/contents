@@ -3,13 +3,15 @@
     <entity name="Page" representedClassName="DLTPage" syncable="YES">
         <attribute name="after" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="befor" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="postSet" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Post" inverseName="page" inverseEntity="Post" syncable="YES"/>
+        <attribute name="insertDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <relationship name="postSet" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Post" inverseName="page" inverseEntity="Post" syncable="YES"/>
     </entity>
     <entity name="Post" representedClassName="DLTPost" syncable="YES">
         <attribute name="commentsNumber" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="createdDate" attributeType="Date" indexed="YES" syncable="YES"/>
         <attribute name="identifier" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="isSelf" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="pageOrder" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="score" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="selftext" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="thumbnailURL" optional="YES" attributeType="String" syncable="YES"/>

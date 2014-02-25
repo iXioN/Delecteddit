@@ -16,6 +16,7 @@
 @property (nonatomic, retain) NSString * after;
 @property (nonatomic, retain) NSString * befor;
 @property (nonatomic, retain) NSSet *postSet;
+@property (nonatomic, retain) NSDate * insertDate;
 @end
 
 @interface DLTPage (CoreDataGeneratedAccessors)

@@ -21,6 +21,8 @@
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, strong) DLTRestManager *restManager;
 @property (nonatomic, strong) NSString *nextPage;
+@property (nonatomic, strong) DLTPage *firstPage;
+
 @end
 
 @implementation DLTMasterViewController
@@ -39,7 +41,9 @@
     if (!_fetchedResultsController) {
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Post"];
         fetchRequest.sortDescriptors = @[
-                                         [NSSortDescriptor sortDescriptorWithKey:@"score" ascending:NO],
+                                         [NSSortDescriptor sortDescriptorWithKey:@"page.insertDate" ascending:YES],
+                                         [NSSortDescriptor sortDescriptorWithKey:@"pageOrder" ascending:YES],
+
                                          ];
         self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[RKManagedObjectStore defaultStore].mainQueueManagedObjectContext sectionNameKeyPath:nil cacheName:nil];
         self.fetchedResultsController.delegate = self;
@@ -83,6 +87,10 @@
     [objectManager getObjectsAtPath:jsonPath parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         //the fetchedResultsController send notification when objects are loaded, we don't need to call the reload data
         if ([mappingResult count]>0){
+            if (!self.firstPage) {
+                //keep a track of the first page, used when pull to refresh
+                self.firstPage = [[mappingResult dictionary] objectForKey:@"data"];
+            }
             self.nextPage = [[[mappingResult dictionary] objectForKey:@"data"] valueForKey:@"after"];
         }
         [self.refreshControl endRefreshing];
@@ -97,6 +105,15 @@
 }
 
 - (IBAction)refresh:(id)sender {
+    //the pull to refresh will reset the page loaded excepte the first page
+    self.nextPage = nil;
+    NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
+    NSFetchRequest * fetch = [[NSFetchRequest alloc] init];
+    [fetch setEntity:[NSEntityDescription entityForName:@"Page" inManagedObjectContext:context]];
+    fetch.predicate = [NSPredicate predicateWithFormat:@"SELF != %@", self.firstPage];
+    NSArray * result = [context executeFetchRequest:fetch error:nil];
+    for (id page in result)
+        [context deleteObject:page];
     [self loadData];
 }
 
@@ -137,6 +154,7 @@
     //if url, open safari to the given url
     } else if (post.url && [post.url length] > 0){
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:post.url]];
+        [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES]; 
         return NO;
     }
     return NO;

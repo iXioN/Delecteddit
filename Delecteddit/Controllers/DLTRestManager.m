@@ -31,10 +31,27 @@
      */
     if (!managedObjectStore.persistentStoreCoordinator){
         [managedObjectStore createPersistentStoreCoordinator];
+
         NSString *storePath = [RKApplicationDataDirectory() stringByAppendingPathComponent:@"Delecteddit.sqlite"];
         NSError *error;
+        NSDictionary *options = @{
+                                  NSMigratePersistentStoresAutomaticallyOption : @YES,
+                                  NSInferMappingModelAutomaticallyOption : @YES
+                                  };
+
+        //uncomment for in memory persistant store
         //NSPersistentStore *persistentStore = [managedObjectStore addInMemoryPersistentStore:&error];//for in memory persistentStore
-        NSPersistentStore *persistentStore = [managedObjectStore addSQLitePersistentStoreAtPath:storePath fromSeedDatabaseAtPath:nil withConfiguration:nil options:nil error:&error];
+        NSPersistentStore *persistentStore = [managedObjectStore addSQLitePersistentStoreAtPath:storePath fromSeedDatabaseAtPath:nil withConfiguration:nil options:options error:&error];
+        if (!persistentStore) {
+            // Delete file
+            if ([[NSFileManager defaultManager] fileExistsAtPath:storePath]) {
+                if (![[NSFileManager defaultManager] removeItemAtPath:storePath error:&error]) {
+                    NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+                    abort();
+                }
+            }
+            persistentStore = [managedObjectStore addSQLitePersistentStoreAtPath:storePath fromSeedDatabaseAtPath:nil withConfiguration:nil options:options error:&error];
+        }
         NSAssert(persistentStore, @"Failed to add persistent store with error: %@", error);
         
         // Create the managed object contexts
@@ -61,6 +78,8 @@
                                                          @"data.selftext" : @"selftext",
                                                          @"data.is_self" : @"isSelf",
                                                          @"data.url" : @"url",
+                                                         @"@metadata.mapping.collectionIndex" : @"pageOrder"
+                                                         
                                                          }];
         return posttMapping;
 }
@@ -68,7 +87,7 @@
 - (RKEntityMapping *)pageEntityMapping {
     RKObjectManager *sharedManager = [RKObjectManager sharedManager];
     RKEntityMapping *pageMapping = [RKEntityMapping mappingForEntityForName:@"Page" inManagedObjectStore:sharedManager.managedObjectStore];
-//    pageMapping.identificationAttributes = @[ @"after" ];
+    pageMapping.identificationAttributes = @[ @"after" ];
     [pageMapping addAttributeMappingsFromDictionary:@{
                                                        @"after": @"after",
                                                        @"befor" : @"befor",

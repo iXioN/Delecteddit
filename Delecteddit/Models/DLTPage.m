@@ -16,4 +16,13 @@
 @dynamic befor;
 @dynamic postSet;
 
+@dynamic insertDate;
+
+-(void)willSave {
+    NSDate *now = [NSDate date];
+    if (self.insertDate == nil ) {
+        self.insertDate = now;
+    }
+}
+
 @end
